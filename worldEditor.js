@@ -95,6 +95,15 @@ class WorldEditor {
             if (this.viewport.isSpaceDown || evt.button === 1) {
                 return; // Panning
             }
+
+            this.mouse = this.viewport.getMouse(evt);
+            if (this.mode === "road") {
+                this.hoveredPoint = getNearestPoint(this.mouse, this.graph.points, 18 * this.viewport.zoom);
+            } else if (this.mode === "eraser") {
+                this.hoveredItem = this.world.getItemAt(this.mouse);
+                this.hoveredPoint = getNearestPoint(this.mouse, this.graph.points, 18 * this.viewport.zoom);
+            }
+
             if (evt.button === 0) { // Left-click
                 this.#handleLeftClick();
             } else if (evt.button === 2) { // Right-click
@@ -159,9 +168,12 @@ class WorldEditor {
     // ── Tool Handlers ───────────────────────────────────────────────
     #handleRoadClick() {
         if (this.hoveredPoint) {
-            if (this.selectedPoint) {
-                this.graph.tryAddSegment(new Segment(this.selectedPoint, this.hoveredPoint));
-                this.world.generate();
+            if (this.selectedPoint && !this.selectedPoint.equals(this.hoveredPoint)) {
+                const added = this.graph.tryAddSegment(new Segment(this.selectedPoint, this.hoveredPoint));
+                if (added) {
+                    showToast("Connected road segment");
+                    this.world.generate();
+                }
             }
             this.selectedPoint = this.hoveredPoint;
             this.draggingPoint = true;
@@ -172,9 +184,12 @@ class WorldEditor {
         this.graph.addPoint(newPoint);
         if (this.selectedPoint) {
             this.graph.tryAddSegment(new Segment(this.selectedPoint, newPoint));
+            showToast("Road segment created");
+        } else {
+            showToast("Road point placed. Click to extend road");
         }
         this.selectedPoint = newPoint;
-        this.hoveredPoint = newPoint;
+        this.hoveredPoint = null;
         this.world.generate();
     }
 
@@ -279,15 +294,20 @@ class WorldEditor {
         // 1. Road Mode Overlays
         if (mode === "road") {
             this.graph.draw(ctx);
-            if (this.hoveredPoint) {
-                this.hoveredPoint.draw(ctx, 22, "#f59e0b");
-            }
             if (this.selectedPoint) {
-                const intent = this.hoveredPoint ? this.hoveredPoint : mouse;
+                const intent = (this.hoveredPoint && !this.hoveredPoint.equals(this.selectedPoint))
+                    ? this.hoveredPoint
+                    : mouse;
                 if (intent) {
-                    new Segment(this.selectedPoint, intent).draw(ctx, 3, "rgba(255, 255, 255, 0.6)");
+                    ctx.save();
+                    ctx.setLineDash([8, 6]);
+                    new Segment(this.selectedPoint, intent).draw(ctx, 3.5, "rgba(56, 189, 248, 0.85)");
+                    ctx.restore();
                 }
-                this.selectedPoint.draw(ctx, 20, "#38bdf8");
+                this.selectedPoint.draw(ctx, 22, "#38bdf8");
+            }
+            if (this.hoveredPoint && (!this.selectedPoint || !this.selectedPoint.equals(this.hoveredPoint))) {
+                this.hoveredPoint.draw(ctx, 22, "#f59e0b");
             }
             return;
         }

@@ -1,6 +1,20 @@
 const myCanvas = document.getElementById("myCanvas");
 const ctx = myCanvas.getContext("2d");
 
+// ── Toast Notifications ─────────────────────────────────────────────
+let toastTimeout = null;
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2400);
+}
+
 // Load saved world or create default realistic town
 let worldData = null;
 try {
@@ -223,6 +237,7 @@ function dispose() {
     world.generate();
     localStorage.removeItem("virtual_world_data");
     localStorage.removeItem("graph");
+    viewport.resetView();
     showToast("World cleared");
 }
 
@@ -295,17 +310,4 @@ function fitTownView() {
     showToast("Whole town in view");
 }
 
-// ── Toast Notifications ─────────────────────────────────────────────
-let toastTimeout = null;
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.add("show");
-
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2400);
-}
 
