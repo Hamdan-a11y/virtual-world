@@ -1,12 +1,202 @@
-h1{
-color: cyan;
+:root {
+    --bg-app: #0e1113;
+    --bg-surface: rgba(22, 27, 34, 0.75);
+    --bg-surface-hover: rgba(35, 43, 54, 0.85);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-focus: rgba(255, 255, 255, 0.2);
+    --text-primary: #f0f3f6;
+    --text-secondary: #8b949e;
+    --accent-emerald: #10b981;
+    --accent-blue: #38bdf8;
+    --terrain-grass: #2d4a34;
+
+    /* Emil Kowalski custom easings */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #222;
-    color: white;
-    text-align: center;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 32px;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header & Brand */
+.app-header {
+    width: 100%;
+    max-width: 1300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand h1 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+.brand-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent-blue);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+/* Floating Toolbar */
+.toolbar {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1px solid var(--border-subtle);
+    backdrop-filter: blur(16px);
+    transition: transform 160ms var(--ease-out), background-color 160ms ease, border-color 160ms ease;
+    will-change: transform;
+}
+
+.btn-secondary {
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-secondary:hover {
+        background: var(--bg-surface-hover);
+        color: var(--text-primary);
+        border-color: var(--border-focus);
+    }
+}
+
+.btn-primary {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover {
+        background: #334155;
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+}
+
+/* Emil Kowalski active press feedback */
+.btn:active {
+    transform: scale(0.96);
+}
+
+/* Canvas Viewport */
+.canvas-container {
+    position: relative;
+    width: 100%;
+    max-width: 1300px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-subtle);
 }
 
 #myCanvas {
-    background-color: white;
+    display: block;
+    width: 100%;
+    height: auto;
+    background-color: var(--terrain-grass);
+    cursor: crosshair;
+}
+
+/* Micro-HUD Legend */
+.hud-shortcuts {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(14, 17, 19, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 9999px;
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.hud-item kbd {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    font-family: inherit;
+    margin-right: 4px;
+}
+
+.hud-sep {
+    opacity: 0.3;
+}
+
+/* Emil Sonner-style Toast Notification */
+.toast {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-12px) scale(0.95);
+    opacity: 0;
+    pointer-events: none;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+    will-change: transform, opacity;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
 }

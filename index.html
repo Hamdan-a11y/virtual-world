@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>Virtual World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual World Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1>World Editor</h1>
-    <div id="controls">
-    <button onclick="dispose()">🗑️ Clear</button>
-    <button onclick="save()">💾 Save</button>
-    </div>
+</head>
+<body>
+    <header class="app-header">
+        <div class="brand">
+            <span class="brand-badge">3D ENGINE</span>
+            <h1>Virtual World</h1>
+        </div>
 
-    <canvas id="myCanvas" width="1300" height="600"></canvas>
+        <nav class="toolbar" aria-label="Editor actions">
+            <button class="btn btn-secondary" onclick="dispose()" title="Clear world (Delete all)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                <span>Clear</span>
+            </button>
+            <button class="btn btn-primary" onclick="save()" title="Save world to browser storage">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span>Save World</span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="canvas-container">
+        <canvas id="myCanvas" width="1300" height="600"></canvas>
+        
+        <footer class="hud-shortcuts">
+            <span class="hud-item"><kbd>Left Click</kbd> Add / Connect</span>
+            <span class="hud-sep">·</span>
+            <span class="hud-item"><kbd>Right Click</kbd> Deselect / Delete</span>
+            <span class="hud-sep">·</span>
+            <span class="hud-item"><kbd>Wheel</kbd> Zoom</span>
+            <span class="hud-sep">·</span>
+            <span class="hud-item"><kbd>Wheel Drag</kbd> Pan</span>
+        </footer>
+
+        <div id="toast" class="toast" aria-live="polite"></div>
+    </main>
+
+    <!-- Scripts -->
     <script src="primitives/point.js"></script>
     <script src="primitives/segment.js"></script>
     <script src="primitives/polygon.js"></script>
@@ -25,7 +57,5 @@
     <script src="viewport.js"></script>
     <script src="graphEditor.js"></script>
     <script src="main.js"></script>
-
-  </body>
-
+</body>
 </html>

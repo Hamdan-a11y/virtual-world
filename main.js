@@ -24,8 +24,22 @@ function dispose() {
     graphEditor.dispose();
     world.generate();
     localStorage.removeItem("graph");
+    showToast("🗑️ World cleared");
 }
 
 function save() {
     localStorage.setItem("graph", JSON.stringify(graph));
+    showToast("💾 World saved successfully");
+}
+
+let toastTimeout = null;
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2200);
 }
