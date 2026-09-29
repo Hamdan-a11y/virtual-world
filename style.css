@@ -1,0 +1,12 @@
+h1{
+color: cyan;
+}
+body {
+    background-color: #222;
+    color: white;
+    text-align: center;
+}
+
+#myCanvas {
+    background-color: white;
+}
