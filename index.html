@@ -44,19 +44,23 @@
         <div id="toast" class="toast" aria-live="polite"></div>
     </main>
 
-    <!-- Scripts -->
-    <script src="primitives/point.js"></script>
-    <script src="primitives/segment.js"></script>
-    <script src="primitives/polygon.js"></script>
-    <script src="primitives/envelope.js"></script>
-    <script src="items/tree.js"></script>
-    <script src="items/building.js"></script>
-    <script src="items/car.js"></script>
-    <script src="world.js"></script>
-    <script src="math/utils.js"></script>
-    <script src="math/graph.js"></script>
-    <script src="viewport.js"></script>
-    <script src="graphEditor.js"></script>
-    <script src="main.js"></script>
+    <!-- Math utilities must load first (used by all other modules) -->
+    <script src="math/utils.js?v=5"></script>
+    <!-- Primitives -->
+    <script src="primitives/point.js?v=5"></script>
+    <script src="primitives/segment.js?v=5"></script>
+    <script src="primitives/polygon.js?v=5"></script>
+    <script src="primitives/envelope.js?v=5"></script>
+    <!-- Items -->
+    <script src="items/tree.js?v=5"></script>
+    <script src="items/building.js?v=5"></script>
+    <!-- Graph & World -->
+    <script src="math/graph.js?v=5"></script>
+    <script src="world.js?v=5"></script>
+    <!-- Editor -->
+    <script src="viewport.js?v=5"></script>
+    <script src="graphEditor.js?v=5"></script>
+    <!-- Entry point -->
+    <script src="main.js?v=5"></script>
 </body>
 </html>
