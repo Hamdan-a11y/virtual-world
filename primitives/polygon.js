@@ -77,6 +77,16 @@ class Polygon {
         return intersectionCount % 2 == 1;
     }
 
+    center() {
+        if (this.points.length === 0) return new Point(0, 0);
+        const sum = this.points.reduce((acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }), { x: 0, y: 0 });
+        return new Point(sum.x / this.points.length, sum.y / this.points.length);
+    }
+
+    intersects(otherPoly) {
+        return polygonsIntersect(this, otherPoly);
+    }
+
     draw(ctx, { stroke = "#444", lineWidth = 2, fill = "#555" } = {}) {
         ctx.beginPath();
         ctx.fillStyle = fill;

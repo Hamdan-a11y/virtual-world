@@ -3,38 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual World Studio</title>
-    <meta name="description" content="Build your own virtual world with roads, buildings, traffic and trees. Interactive 3D canvas editor.">
+    <title>Virtual World Studio | 3D Interactive World Builder</title>
+    <meta name="description" content="Build your custom virtual world with roads, houses, skyscrapers, walking pedestrians, realistic cars, and trees in real-time 3D canvas.">
+    <link rel="icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
     <header class="app-header">
         <div class="brand">
-            <span class="brand-badge">3D ENGINE</span>
-            <h1>Virtual World</h1>
+            <span class="brand-badge">REALISTIC 3D</span>
+            <h1>Virtual World Studio</h1>
         </div>
 
-        <nav class="toolbar" aria-label="Editor actions">
+        <!-- Primary Tool Palette -->
+        <nav class="tool-palette" aria-label="Placement Tools">
+            <button class="tool-btn active" data-mode="road" onclick="setEditorMode('road')" title="Draw & Connect Roads [1]">
+                <span class="tool-icon">🛣️</span>
+                <span class="tool-label">Road</span>
+                <kbd class="tool-kbd">1</kbd>
+            </button>
+            <button class="tool-btn" data-mode="building" onclick="setEditorMode('building')" title="Place Commercial Building [2]">
+                <span class="tool-icon">🏢</span>
+                <span class="tool-label">Building</span>
+                <kbd class="tool-kbd">2</kbd>
+            </button>
+            <button class="tool-btn" data-mode="house" onclick="setEditorMode('house')" title="Place Residential House [3]">
+                <span class="tool-icon">🏡</span>
+                <span class="tool-label">House</span>
+                <kbd class="tool-kbd">3</kbd>
+            </button>
+            <button class="tool-btn" data-mode="tree" onclick="setEditorMode('tree')" title="Plant Realistic Trees [4]">
+                <span class="tool-icon">🌳</span>
+                <span class="tool-label">Tree</span>
+                <kbd class="tool-kbd">4</kbd>
+            </button>
+            <button class="tool-btn" data-mode="car" onclick="setEditorMode('car')" title="Spawn Driving Cars [5]">
+                <span class="tool-icon">🚗</span>
+                <span class="tool-label">Car</span>
+                <kbd class="tool-kbd">5</kbd>
+            </button>
+            <button class="tool-btn" data-mode="person" onclick="setEditorMode('person')" title="Place Walking Pedestrians [6]">
+                <span class="tool-icon">🚶</span>
+                <span class="tool-label">Person</span>
+                <kbd class="tool-kbd">6</kbd>
+            </button>
+            <button class="tool-btn" data-mode="light" onclick="setEditorMode('light')" title="Place Street Lamps [7]">
+                <span class="tool-icon">💡</span>
+                <span class="tool-label">Lamp</span>
+                <kbd class="tool-kbd">7</kbd>
+            </button>
+            <div class="tool-sep"></div>
+            <button class="tool-btn action-btn" onclick="rotateActiveItem()" title="Rotate item 45° [R]">
+                <span class="tool-icon">🔄</span>
+                <span class="tool-label">Rotate</span>
+                <kbd class="tool-kbd">R</kbd>
+            </button>
+            <button class="tool-btn danger-tool" data-mode="eraser" onclick="setEditorMode('eraser')" title="Erase item or road point [X]">
+                <span class="tool-icon">🧹</span>
+                <span class="tool-label">Eraser</span>
+                <kbd class="tool-kbd">X</kbd>
+            </button>
+        </nav>
+
+        <!-- Right Toolbar Actions -->
+        <div class="toolbar-actions">
             <button class="btn btn-secondary" onclick="dispose()" title="Clear world (Delete all)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                 <span>Clear</span>
             </button>
-            <button class="btn btn-primary" onclick="save()" title="Save world to browser storage">
+            <button class="btn btn-primary" onclick="save()" title="Save custom world to browser">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                <span>Save World</span>
+                <span>Save</span>
             </button>
-            <button class="btn btn-accent" onclick="toggleSettings()" title="World Settings">
+            <button class="btn btn-accent" onclick="toggleSettings()" title="Settings">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
                 <span>Settings</span>
             </button>
-        </nav>
+        </div>
     </header>
 
+    <!-- Sub-options Bar (e.g. Tree species picker) -->
+    <div class="sub-toolbar" id="treePicker" style="display: none;">
+        <span class="sub-label">Tree Variety:</span>
+        <button class="tree-chip active" data-tree="oak" onclick="setTreeSpecies('oak')">🟢 Oak</button>
+        <button class="tree-chip" data-tree="pine" onclick="setTreeSpecies('pine')">🌲 Pine</button>
+        <button class="tree-chip" data-tree="cherry" onclick="setTreeSpecies('cherry')">🌸 Cherry</button>
+        <button class="tree-chip" data-tree="autumn" onclick="setTreeSpecies('autumn')">🍁 Autumn</button>
+    </div>
+
     <main class="canvas-container">
-        <canvas id="myCanvas" width="1300" height="600"></canvas>
+        <canvas id="myCanvas" width="1300" height="640"></canvas>
 
         <!-- Settings Panel -->
         <aside class="settings-panel" id="settingsPanel">
@@ -42,43 +104,89 @@
                 <h2>⚙ World Settings</h2>
                 <button class="btn-close" onclick="toggleSettings()">✕</button>
             </div>
+            
             <div class="setting-group">
-                <label for="carSlider">🚗 Traffic Cars</label>
+                <label for="carSlider">🚗 Ambient Traffic</label>
                 <div class="slider-row">
-                    <input type="range" id="carSlider" min="0" max="20" value="10"
+                    <input type="range" id="carSlider" min="0" max="25" value="8"
                            oninput="updateCarCount(this.value)">
-                    <span class="slider-value" id="carCountLabel">10</span>
+                    <span class="slider-value" id="carCountLabel">8</span>
                 </div>
             </div>
+            
             <div class="setting-group">
                 <label for="roadSlider">🛣️ Road Width</label>
                 <div class="slider-row">
-                    <input type="range" id="roadSlider" min="60" max="200" value="100"
+                    <input type="range" id="roadSlider" min="60" max="180" value="100"
                            oninput="updateRoadWidth(this.value)">
                     <span class="slider-value" id="roadWidthLabel">100px</span>
                 </div>
             </div>
+            
             <hr class="divider">
+
+            <div class="setting-group toggle-row">
+                <label class="toggle-label">
+                    <input type="checkbox" id="autoSceneryToggle" checked
+                           onchange="toggleAutoScenery(this.checked)">
+                    <span class="toggle-switch"></span>
+                    ✨ Auto Road Scenery
+                </label>
+            </div>
+
             <div class="setting-group toggle-row">
                 <label class="toggle-label">
                     <input type="checkbox" id="buildingToggle" checked
                            onchange="toggleBuildings(this.checked)">
                     <span class="toggle-switch"></span>
-                    🏠 Buildings
+                    🏢 Commercial Towers
                 </label>
             </div>
+
+            <div class="setting-group toggle-row">
+                <label class="toggle-label">
+                    <input type="checkbox" id="houseToggle" checked
+                           onchange="toggleHouses(this.checked)">
+                    <span class="toggle-switch"></span>
+                    🏡 Residential Houses
+                </label>
+            </div>
+
             <div class="setting-group toggle-row">
                 <label class="toggle-label">
                     <input type="checkbox" id="treeToggle" checked
                            onchange="toggleTrees(this.checked)">
                     <span class="toggle-switch"></span>
-                    🌳 Trees
+                    🌳 Trees & Flora
+                </label>
+            </div>
+
+            <div class="setting-group toggle-row">
+                <label class="toggle-label">
+                    <input type="checkbox" id="personToggle" checked
+                           onchange="togglePeople(this.checked)">
+                    <span class="toggle-switch"></span>
+                    🚶 Pedestrians
+                </label>
+            </div>
+
+            <div class="setting-group toggle-row">
+                <label class="toggle-label">
+                    <input type="checkbox" id="lightToggle" checked
+                           onchange="toggleLights(this.checked)">
+                    <span class="toggle-switch"></span>
+                    💡 Street Lamps
                 </label>
             </div>
         </aside>
 
+        <!-- HUD Shortcuts Legend -->
         <footer class="hud-shortcuts">
-            <span class="hud-item"><kbd>Left Click</kbd> Add / Connect</span>
+            <span class="hud-item"><kbd>1-7</kbd> Tools</span>
+            <span class="hud-sep">·</span>
+            <span class="hud-item"><kbd>Left Click</kbd> Place / Connect</span>
+            <span class="hud-sep">·</span>
+            <span class="hud-item"><kbd>R</kbd> Rotate 45°</span>
             <span class="hud-sep">·</span>
             <span class="hud-item"><kbd>Right Click</kbd> Deselect / Delete</span>
             <span class="hud-sep">·</span>
@@ -90,24 +198,27 @@
         <div id="toast" class="toast" aria-live="polite"></div>
     </main>
 
-    <!-- Math utilities must load first (used by all other modules) -->
-    <script src="math/utils.js?v=6"></script>
+    <!-- Math utilities must load first -->
+    <script src="math/utils.js?v=8"></script>
     <!-- Primitives -->
-    <script src="primitives/point.js?v=6"></script>
-    <script src="primitives/segment.js?v=6"></script>
-    <script src="primitives/polygon.js?v=6"></script>
-    <script src="primitives/envelope.js?v=6"></script>
-    <!-- Items (depend on utils + primitives) -->
-    <script src="items/tree.js?v=6"></script>
-    <script src="items/building.js?v=6"></script>
-    <script src="items/car.js?v=6"></script>
-    <!-- Graph & World -->
-    <script src="math/graph.js?v=6"></script>
-    <script src="world.js?v=6"></script>
-    <!-- Editor -->
-    <script src="viewport.js?v=6"></script>
-    <script src="graphEditor.js?v=6"></script>
-    <!-- Entry point -->
-    <script src="main.js?v=6"></script>
+    <script src="primitives/point.js?v=8"></script>
+    <script src="primitives/segment.js?v=8"></script>
+    <script src="primitives/polygon.js?v=8"></script>
+    <script src="primitives/envelope.js?v=8"></script>
+    <!-- Items -->
+    <script src="items/tree.js?v=8"></script>
+    <script src="items/building.js?v=8"></script>
+    <script src="items/house.js?v=8"></script>
+    <script src="items/person.js?v=8"></script>
+    <script src="items/light.js?v=8"></script>
+    <script src="items/car.js?v=8"></script>
+    <!-- Graph & World Engine -->
+    <script src="math/graph.js?v=8"></script>
+    <script src="world.js?v=8"></script>
+    <!-- Viewport & Unified World Editor -->
+    <script src="viewport.js?v=8"></script>
+    <script src="worldEditor.js?v=8"></script>
+    <!-- Main Application Entry Point -->
+    <script src="main.js?v=8"></script>
 </body>
 </html>
