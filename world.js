@@ -80,8 +80,7 @@ class World {
         if (this.graph.segments.length === 0) return [];
 
         const tmpEnvelopes = [];
-        // Generously buffer envelopes outward so building guides never touch road
-        const bufferDistance = this.roadWidth + this.buildingWidth * 1.5 + this.spacing * 2;
+        const bufferDistance = this.roadWidth + this.buildingWidth + this.spacing * 2;
 
         for (const seg of this.graph.segments) {
             tmpEnvelopes.push(
@@ -94,32 +93,46 @@ class World {
 
         for (const seg of guides) {
             const segLen = seg.length();
-            if (segLen < this.buildingWidth) continue;
+            if (segLen < 80) continue;
 
-            // Compute candidate building footprint
-            const bldgPoly = new Envelope(seg, this.buildingWidth * 0.8, 0).poly;
+            // Partition long guide segments into realistic building lots (80-100px each)
+            const parcelWidth = 90;
+            const parcelGap = 35;
+            const count = Math.max(1, Math.floor((segLen - parcelGap) / (parcelWidth + parcelGap)));
 
-            // STRICT COLLISION CHECK: Discard ANY building that touches road or sidewalk!
-            if (this.isCollidingWithRoad(bldgPoly, 30)) continue;
+            for (let i = 0; i < count; i++) {
+                const t1 = (i * (parcelWidth + parcelGap) + parcelGap / 2) / segLen;
+                const t2 = (i * (parcelWidth + parcelGap) + parcelGap / 2 + parcelWidth) / segLen;
+                if (t2 > 1) break;
 
-            // Check collision with manual buildings or houses
-            let collidesWithManual = false;
-            for (const b of this.manualBuildings) {
-                if (bldgPoly.intersects(b.base)) { collidesWithManual = true; break; }
+                const p1 = lerp2D(seg.p1, seg.p2, t1);
+                const p2 = lerp2D(seg.p1, seg.p2, t2);
+                const subSeg = new Segment(p1, p2);
+
+                const bldgPoly = new Envelope(subSeg, 75, 0).poly;
+
+                // STRICT COLLISION CHECK: Discard ANY building that touches road or sidewalk!
+                if (this.isCollidingWithRoad(bldgPoly, 25)) continue;
+
+                // Check collision with manual buildings or houses
+                let collidesWithManual = false;
+                for (const b of this.manualBuildings) {
+                    if (bldgPoly.intersects(b.base)) { collidesWithManual = true; break; }
+                }
+                for (const h of this.manualHouses) {
+                    if (bldgPoly.intersects(h.base)) { collidesWithManual = true; break; }
+                }
+                if (collidesWithManual) continue;
+
+                // Check collision with already accepted auto-buildings
+                let collidesWithOther = false;
+                for (const existing of buildings) {
+                    if (bldgPoly.intersects(existing.base)) { collidesWithOther = true; break; }
+                }
+                if (collidesWithOther) continue;
+
+                buildings.push(new Building(bldgPoly, 120 + ((i * 37) % 80)));
             }
-            for (const h of this.manualHouses) {
-                if (bldgPoly.intersects(h.base)) { collidesWithManual = true; break; }
-            }
-            if (collidesWithManual) continue;
-
-            // Check collision with already accepted auto-buildings
-            let collidesWithOther = false;
-            for (const existing of buildings) {
-                if (bldgPoly.intersects(existing.base)) { collidesWithOther = true; break; }
-            }
-            if (collidesWithOther) continue;
-
-            buildings.push(new Building(bldgPoly));
         }
 
         return buildings;

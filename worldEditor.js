@@ -64,6 +64,14 @@ class WorldEditor {
                 setEditorMode("eraser");
             } else if (key === "escape") {
                 setEditorMode("road");
+            } else if (key === "+" || key === "=") {
+                zoomIn();
+            } else if (key === "-" || key === "_") {
+                zoomOut();
+            } else if (key === "f") {
+                fitTownView();
+            } else if (key === "0") {
+                resetView();
             }
         });
 
@@ -84,6 +92,9 @@ class WorldEditor {
         });
 
         this.canvas.addEventListener("mousedown", (evt) => {
+            if (this.viewport.isSpaceDown || evt.button === 1) {
+                return; // Panning
+            }
             if (evt.button === 0) { // Left-click
                 this.#handleLeftClick();
             } else if (evt.button === 2) { // Right-click

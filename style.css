@@ -524,6 +524,54 @@ body {
     opacity: 0.35;
 }
 
+/* ── Floating Viewport Controls ──────────────────────────────── */
+.viewport-controls {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 3px 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 50;
+}
+
+.view-ctrl-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.view-ctrl-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.view-ctrl-btn:active {
+    transform: scale(0.92);
+}
+
+.view-ctrl-sep {
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 2px;
+}
+
 /* ── Toast Notification ──────────────────────────────────────── */
 .toast {
     position: absolute;

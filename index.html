@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
     <header class="app-header">
@@ -237,45 +237,64 @@
             </div>
         </aside>
 
+        <!-- Floating Viewport Controls -->
+        <div class="viewport-controls" aria-label="Zoom and View Controls">
+            <button class="view-ctrl-btn" onclick="zoomIn()" title="Zoom In (+)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <button class="view-ctrl-btn" onclick="zoomOut()" title="Zoom Out (-)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="view-ctrl-sep"></div>
+            <button class="view-ctrl-btn" onclick="fitTownView()" title="Fit Whole Town in View [F]">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+            </button>
+            <button class="view-ctrl-btn" onclick="resetView()" title="Reset to 100% [0]">
+                <span style="font-size: 0.7rem; font-weight: 700;">1:1</span>
+            </button>
+        </div>
+
         <!-- HUD Shortcuts Legend -->
         <footer class="hud-shortcuts">
             <span class="hud-item"><kbd>1-7</kbd> Tools</span>
             <span class="hud-sep">·</span>
-            <span class="hud-item"><kbd>Left Click</kbd> Place / Connect</span>
+            <span class="hud-item"><kbd>Left Click</kbd> Place</span>
             <span class="hud-sep">·</span>
-            <span class="hud-item"><kbd>R</kbd> Rotate 45°</span>
+            <span class="hud-item"><kbd>R</kbd> Rotate</span>
             <span class="hud-sep">·</span>
-            <span class="hud-item"><kbd>Right Click</kbd> Deselect / Delete</span>
+            <span class="hud-item"><kbd>Right Click</kbd> Delete</span>
             <span class="hud-sep">·</span>
-            <span class="hud-item"><kbd>Wheel</kbd> Zoom</span>
+            <span class="hud-item"><kbd>Wheel / ±</kbd> Zoom</span>
             <span class="hud-sep">·</span>
-            <span class="hud-item"><kbd>Wheel Drag</kbd> Pan</span>
+            <span class="hud-item"><kbd>Space + Drag</kbd> Pan</span>
+            <span class="hud-sep">·</span>
+            <span class="hud-item"><kbd>F</kbd> Fit All</span>
         </footer>
 
         <div id="toast" class="toast" aria-live="polite"></div>
     </main>
 
     <!-- Math utilities must load first -->
-    <script src="math/utils.js?v=10"></script>
+    <script src="math/utils.js?v=11"></script>
     <!-- Primitives -->
-    <script src="primitives/point.js?v=10"></script>
-    <script src="primitives/segment.js?v=10"></script>
-    <script src="primitives/polygon.js?v=10"></script>
-    <script src="primitives/envelope.js?v=10"></script>
+    <script src="primitives/point.js?v=11"></script>
+    <script src="primitives/segment.js?v=11"></script>
+    <script src="primitives/polygon.js?v=11"></script>
+    <script src="primitives/envelope.js?v=11"></script>
     <!-- Items -->
-    <script src="items/tree.js?v=10"></script>
-    <script src="items/building.js?v=10"></script>
-    <script src="items/house.js?v=10"></script>
-    <script src="items/person.js?v=10"></script>
-    <script src="items/light.js?v=10"></script>
-    <script src="items/car.js?v=10"></script>
+    <script src="items/tree.js?v=11"></script>
+    <script src="items/building.js?v=11"></script>
+    <script src="items/house.js?v=11"></script>
+    <script src="items/person.js?v=11"></script>
+    <script src="items/light.js?v=11"></script>
+    <script src="items/car.js?v=11"></script>
     <!-- Graph & World Engine -->
-    <script src="math/graph.js?v=10"></script>
-    <script src="world.js?v=10"></script>
+    <script src="math/graph.js?v=11"></script>
+    <script src="world.js?v=11"></script>
     <!-- Viewport & Unified World Editor -->
-    <script src="viewport.js?v=10"></script>
-    <script src="worldEditor.js?v=10"></script>
+    <script src="viewport.js?v=11"></script>
+    <script src="worldEditor.js?v=11"></script>
     <!-- Main Application Entry Point -->
-    <script src="main.js?v=10"></script>
+    <script src="main.js?v=11"></script>
 </body>
 </html>

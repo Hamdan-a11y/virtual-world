@@ -77,6 +77,7 @@ const worldEditor = new WorldEditor(viewport, world);
 
 // Initial generation
 world.generate();
+fitTownView();
 
 // Main render loop with bulletproof error recovery
 animate();
@@ -268,6 +269,32 @@ function toggleAutoScenery(checked) {
     showToast(checked ? "Auto-scenery enabled" : "Manual mode only");
 }
 
+// ── Viewport & Zoom Actions ─────────────────────────────────────────
+function zoomIn() {
+    viewport.zoomIn();
+}
+
+function zoomOut() {
+    viewport.zoomOut();
+}
+
+function resetView() {
+    viewport.resetView();
+    showToast("View reset to 100%");
+}
+
+function fitTownView() {
+    const pts = [...graph.points];
+    for (const b of world.manualBuildings) pts.push(b.center);
+    for (const h of world.manualHouses) pts.push(h.center);
+    for (const t of world.manualTrees) pts.push(t.center);
+    for (const p of world.manualPeople) pts.push(p.pos);
+    for (const b of world.autoBuildings) pts.push(b.center);
+
+    viewport.fitBounds(pts, 120);
+    showToast("Whole town in view");
+}
+
 // ── Toast Notifications ─────────────────────────────────────────────
 let toastTimeout = null;
 function showToast(message) {
@@ -281,3 +308,4 @@ function showToast(message) {
         toast.classList.remove("show");
     }, 2400);
 }
+
