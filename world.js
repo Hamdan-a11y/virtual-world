@@ -1,5 +1,5 @@
 class World {
-    constructor(graph, roadWidth = 90, roadRoundness = 10, buildingWidth = 110, spacing = 45) {
+    constructor(graph, roadWidth = 90, roadRoundness = 10, buildingWidth = 120, spacing = 50) {
         this.graph = graph;
         this.roadWidth = roadWidth;
         this.roadRoundness = roadRoundness;
@@ -11,6 +11,7 @@ class World {
         this.buildings = [];
         this.trees = [];
         this.cars = [];
+        this.crossings = [];
 
         this.generate();
     }
@@ -26,38 +27,32 @@ class World {
         this.roadBorders = Polygon.union(this.envelopes.map((e) => e.poly));
         this.buildings = this.#generateBuildings();
         this.trees = this.#generateTrees();
+        this.crossings = this.#generateCrossings();
         this.#spawnCars();
     }
 
     #spawnCars(targetCount = 6) {
-    if (this.graph.segments.length === 0) {
-        this.cars = [];
-        return;
+        if (this.graph.segments.length === 0) {
+            this.cars = [];
+            return;
+        }
+
+        this.cars = this.cars.filter((car) => this.graph.segments.includes(car.segment));
+
+        while (this.cars.length < targetCount) {
+            const seg = this.graph.segments[this.cars.length % this.graph.segments.length];
+            this.cars.push(new Car(seg, 1.8 + Math.random() * 1.2));
+        }
     }
 
-    // Keep existing cars that are still on valid roads
-    this.cars = this.cars.filter((car) => this.graph.segments.includes(car.segment));
-
-    // Spawn cars if we need more
-    while (this.cars.length < targetCount) {
-        const seg = this.graph.segments[this.cars.length % this.graph.segments.length];
-        this.cars.push(new Car(seg, 1.5 + Math.random() * 1.5));
-    }
-}
-
-        #generateBuildings() {
-        const buildingWidth = 55; // Individual detached house width
-        const buildingDepth = 45; // House depth
-        const spacing = 32;       // Green yard gap between houses
-        const setback = 40;       // Distance from road edge to front lawn
-
-        // Setback guide line pushed away from roads
+    // Radu's exact Building Footprint Generator
+    #generateBuildings() {
         const tmpEnvelopes = [];
         for (const seg of this.graph.segments) {
             tmpEnvelopes.push(
                 new Envelope(
                     seg,
-                    this.roadWidth + setback * 2,
+                    this.roadWidth + this.buildingWidth + this.spacing * 2,
                     this.roadRoundness
                 )
             );
@@ -66,62 +61,54 @@ class World {
         const guides = Polygon.union(tmpEnvelopes.map((e) => e.poly));
         const buildings = [];
 
-        // Slice setback guides into discrete individual lots
         for (const seg of guides) {
             const len = seg.length();
-            if (len < buildingWidth + spacing) continue;
-
-            const houseCount = Math.floor(len / (buildingWidth + spacing));
-            const stepT = 1 / (houseCount + 1);
-
-            for (let i = 1; i <= houseCount; i++) {
-                const centerT = i * stepT;
-                const halfW = (buildingWidth / len) / 2;
-                const t1 = Math.max(0, centerT - halfW);
-                const t2 = Math.min(1, centerT + halfW);
-
-                const p1 = lerp2D(seg.p1, seg.p2, t1);
-                const p2 = lerp2D(seg.p1, seg.p2, t2);
-
-                // Extrude house depth perpendicularly away from road
-                const dir = subtract(seg.p2, seg.p1);
-                const norm = angle(dir) + Math.PI / 2;
-
-                const housePoly = new Polygon([
-                    p1,
-                    p2,
-                    translate(p2, norm, buildingDepth),
-                    translate(p1, norm, buildingDepth)
-                ]);
-
-                // Check collision: Never build on top of roads!
-                let collidesWithRoad = false;
+            if (len >= this.buildingWidth) {
+                const bldgEnv = new Envelope(seg, this.buildingWidth, 0);
+                
+                // Never build on roads
+                let collides = false;
                 for (const env of this.envelopes) {
-                    if (env.poly.containsPoint(scale(add(p1, p2), 0.5))) {
-                        collidesWithRoad = true;
+                    if (env.poly.containsPoint(scale(add(seg.p1, seg.p2), 0.5))) {
+                        collides = true;
                         break;
                     }
                 }
 
-                if (!collidesWithRoad) {
-                    buildings.push(new Building(housePoly));
-                }
+                    if (!collides) {
+                       buildings.push(new Building(bldgEnv.poly, 90));
+    }
+
             }
         }
 
         return buildings;
     }
 
+    // Radu's exact Pedestrian Zebra Crossings
+    #generateCrossings() {
+        const crossings = [];
+        for (const seg of this.graph.segments) {
+            if (seg.length() > 100) {
+                // Place zebra crossing at 20% and 80% along long roads
+                crossings.push(new Segment(
+                    lerp2D(seg.p1, seg.p2, 0.25),
+                    lerp2D(seg.p1, seg.p2, 0.28)
+                ));
+            }
+        }
+        return crossings;
+    }
+
+    // Radu's Trees scattered naturally across lawns
     #generateTrees() {
         const points = [];
-        // Place trees in front yards and open spaces between houses
         for (const seg of this.roadBorders) {
             const dir = subtract(seg.p1, seg.p2);
             const norm = angle(dir) + Math.PI / 2;
-            // Plant trees neatly along the sidewalk edge
-            points.push(translate(seg.p1, norm, 24));
+            points.push(translate(seg.p1, norm, 36));
         }
-        return points.map((p) => new Tree(p, 36, 45));
+        return points.map((p) => new Tree(p, 42, 60));
     }
 
     update() {
@@ -131,39 +118,50 @@ class World {
     }
 
     draw(ctx, viewPoint) {
-        // 1. Sidewalk Curb base
+        // 1. Dark Asphalt Roads
         for (const env of this.envelopes) {
-            env.draw(ctx, { fill: "#475569", stroke: "#334155", lineWidth: 18 });
+            env.draw(ctx, { fill: "#414141", stroke: "#414141", lineWidth: 2 });
         }
 
-        // 2. Dark Asphalt road surface
-        for (const env of this.envelopes) {
-            env.draw(ctx, { fill: "#1e293b", stroke: "#1e293b", lineWidth: 2 });
+        // 2. Pedestrian Zebra Crossings (Radu's iconic markings)
+        for (const cross of this.crossings) {
+            const env = new Envelope(cross, this.roadWidth * 0.9, 0);
+            env.draw(ctx, { fill: "#414141", stroke: "#fff", lineWidth: 6 });
+            
+            // Draw zebra bars
+            ctx.beginPath();
+            ctx.setLineDash([6, 8]);
+            ctx.lineWidth = 14;
+            ctx.strokeStyle = "#fff";
+            ctx.moveTo(cross.p1.x, cross.p1.y);
+            ctx.lineTo(cross.p2.x, cross.p2.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
         }
 
-        // 3. Crisp outer road borders
+        // 3. Crisp Solid White Road Borders
         for (const seg of this.roadBorders) {
-            seg.draw(ctx, 3, "rgba(255, 255, 255, 0.85)");
+            seg.draw(ctx, 4, "#ffffff");
         }
 
-        // 4. Dashed Highway Centerlines
+        // 4. Dashed White Center Lane Lines
         for (const seg of this.graph.segments) {
             ctx.beginPath();
-            ctx.setLineDash([12, 12]);
+            ctx.setLineDash([10, 10]);
             ctx.lineWidth = 3;
-            ctx.strokeStyle = "#fbbf24"; // High-visibility amber highway markings
+            ctx.strokeStyle = "#ffffff";
             ctx.moveTo(seg.p1.x, seg.p1.y);
             ctx.lineTo(seg.p2.x, seg.p2.y);
             ctx.stroke();
             ctx.setLineDash([]);
         }
 
-        // 5. Draw Traffic Cars
+        // 5. Traffic Cars
         for (const car of this.cars) {
             car.draw(ctx, viewPoint);
         }
 
-        // 6. Draw 3D Items (Buildings & Trees)
+        // 6. Radu's 3D Buildings & Trees with depth sorting
         const items = [...this.buildings, ...this.trees];
         items.sort(
             (a, b) =>

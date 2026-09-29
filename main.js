@@ -15,11 +15,11 @@ animate();
 function animate() {
     viewport.reset();
     world.update();
-    world.generate();
     world.draw(ctx, scale(viewport.getOffset(), -1));
     graphEditor.display();
     requestAnimationFrame(animate);
 }
+
 
 function dispose() {
     graphEditor.dispose();

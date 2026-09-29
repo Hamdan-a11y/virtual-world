@@ -1,18 +1,12 @@
 class Building {
-    constructor(poly, height = null) {
+    constructor(poly, height = 120) {
         this.base = poly;
-        // Varied realistic heights: cozy houses (45-75px) so they NEVER cover roads
-        this.height = height || 45 + Math.random() * 40;
-
-        // Realistic roof colors: terracotta tiles, modern slate, brick, forest green
-        const roofColors = ["#b91c1c", "#1e293b", "#047857", "#c2410c", "#334155", "#475569"];
-        this.roofColor = roofColors[Math.floor(Math.random() * roofColors.length)];
-        this.wallColor = Math.random() > 0.5 ? "#f1f5f9" : "#e2e8f0";
+        this.height = height;
     }
 
     draw(ctx, viewPoint) {
         const topPoints = this.base.points.map((p) =>
-            getFake3dPoint(p, viewPoint, this.height)
+            getFake3dPoint(p, viewPoint, this.height * 0.6)
         );
         const ceiling = new Polygon(topPoints);
 
@@ -28,38 +22,30 @@ class Building {
             sides.push(sidePoly);
         }
 
+        // Sort sides by distance so nearest face draws on top
         sides.sort(
             (a, b) =>
                 b.distanceToPoint(viewPoint) - a.distanceToPoint(viewPoint)
         );
 
-        // 1. Shaded House Walls with Front Door & Windows
-        for (let i = 0; i < sides.length; i++) {
-            const side = sides[i];
-            const shade = 180 + (i * 20) % 50;
-            side.draw(ctx, { fill: `rgb(${shade}, ${shade - 5}, ${shade - 10})`, stroke: "#64748b", lineWidth: 1 });
-
-            // Windows and door on wall
+        // Directional sunlight from top-left (Radu's lighting algorithm)
+        for (const side of sides) {
             const p1 = side.points[0];
             const p2 = side.points[1];
-            const p3 = side.points[2];
-            const p4 = side.points[3];
-            
-            // Draw cozy windows
-            for (let c = 1; c <= 2; c++) {
-                const tc = c / 3;
-                const btm = lerp2D(p1, p2, tc);
-                const top = lerp2D(p4, p3, tc);
-                const win = lerp2D(btm, top, 0.55);
-                ctx.fillStyle = "#38bdf8"; // Reflective sky-blue glass
-                ctx.fillRect(win.x - 3, win.y - 4, 6, 8);
-                ctx.strokeStyle = "#1e293b";
-                ctx.strokeRect(win.x - 3, win.y - 4, 6, 8);
-            }
+            const angleVal = angle(subtract(p2, p1));
+            // Calculate light bounce based on wall angle
+            const light = Math.max(0.35, Math.min(1, Math.cos(angleVal - Math.PI / 4) * 0.4 + 0.65));
+            const shade = Math.floor(215 * light);
+
+            side.draw(ctx, {
+                fill: `rgb(${shade}, ${shade}, ${Math.floor(shade * 1.03)})`,
+                stroke: "rgba(0, 0, 0, 0.2)",
+                lineWidth: 1
+            });
         }
 
-        // 2. Beautiful Colored Roof with Chimney Accent
-        ceiling.draw(ctx, { fill: this.roofColor, stroke: "rgba(0,0,0,0.3)", lineWidth: 2 });
+        // Crisp flat roof with thin parapet outline
+        ceiling.draw(ctx, { fill: "#f1f5f9", stroke: "rgba(0, 0, 0, 0.25)", lineWidth: 2 });
     }
 }
 

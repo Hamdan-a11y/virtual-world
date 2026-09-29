@@ -1,18 +1,15 @@
 :root {
-    --bg-app: #0e1113;
-    --bg-surface: rgba(22, 27, 34, 0.75);
-    --bg-surface-hover: rgba(35, 43, 54, 0.85);
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-focus: rgba(255, 255, 255, 0.2);
-    --text-primary: #f0f3f6;
-    --text-secondary: #8b949e;
-    --accent-emerald: #10b981;
+    --bg-app: #0f172a;
+    --bg-surface: rgba(30, 41, 59, 0.8);
+    --bg-surface-hover: rgba(51, 65, 85, 0.9);
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --border-focus: rgba(255, 255, 255, 0.25);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
     --accent-blue: #38bdf8;
-    --terrain-grass: #2d4a34;
+    --terrain-grass: #35654d; /* Radu's exact lush virtual world terrain */
 
-    /* Emil Kowalski custom easings */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 * {
