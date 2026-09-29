@@ -7,7 +7,7 @@
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --accent-blue: #38bdf8;
-    --terrain-grass: #35654d; /* Radu's exact lush virtual world terrain */
+    --terrain-grass: #35654d;
 
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -32,7 +32,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Header & Brand */
+/* ── Header & Brand ──────────────────────────────────────────── */
 .app-header {
     width: 100%;
     max-width: 1300px;
@@ -66,7 +66,7 @@ body {
     border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
-/* Floating Toolbar */
+/* ── Toolbar Buttons ─────────────────────────────────────────── */
 .toolbar {
     display: flex;
     gap: 8px;
@@ -84,7 +84,9 @@ body {
     cursor: pointer;
     border: 1px solid var(--border-subtle);
     backdrop-filter: blur(16px);
-    transition: transform 160ms var(--ease-out), background-color 160ms ease, border-color 160ms ease;
+    transition: transform 160ms var(--ease-out),
+                background-color 160ms ease,
+                border-color 160ms ease;
     will-change: transform;
 }
 
@@ -93,40 +95,47 @@ body {
     color: var(--text-secondary);
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .btn-secondary:hover {
-        background: var(--bg-surface-hover);
-        color: var(--text-primary);
-        border-color: var(--border-focus);
-    }
-}
-
 .btn-primary {
     background: #1e293b;
     color: #e2e8f0;
     border-color: rgba(255, 255, 255, 0.12);
 }
 
+.btn-accent {
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent-blue);
+    border-color: rgba(56, 189, 248, 0.2);
+}
+
 @media (hover: hover) and (pointer: fine) {
+    .btn-secondary:hover {
+        background: var(--bg-surface-hover);
+        color: var(--text-primary);
+        border-color: var(--border-focus);
+    }
     .btn-primary:hover {
         background: #334155;
         border-color: rgba(255, 255, 255, 0.25);
     }
+    .btn-accent:hover {
+        background: rgba(56, 189, 248, 0.2);
+        border-color: rgba(56, 189, 248, 0.4);
+    }
 }
 
-/* Emil Kowalski active press feedback */
 .btn:active {
     transform: scale(0.96);
 }
 
-/* Canvas Viewport */
+/* ── Canvas Viewport ─────────────────────────────────────────── */
 .canvas-container {
     position: relative;
     width: 100%;
     max-width: 1300px;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-subtle);
+    box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7),
+                0 0 0 1px var(--border-subtle);
 }
 
 #myCanvas {
@@ -137,7 +146,175 @@ body {
     cursor: crosshair;
 }
 
-/* Micro-HUD Legend */
+/* ── Settings Panel ──────────────────────────────────────────── */
+.settings-panel {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 260px;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 0;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+
+    /* Hidden by default */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px) scale(0.97);
+    transition: opacity 200ms var(--ease-out),
+                transform 200ms var(--ease-out);
+}
+
+.settings-panel.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.panel-header h2 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: background 120ms ease;
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.setting-group {
+    padding: 12px 18px;
+}
+
+.setting-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.slider-row input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    border: 2px solid var(--bg-app);
+    cursor: pointer;
+    transition: transform 120ms ease;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.slider-value {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-blue);
+    min-width: 30px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin: 4px 18px;
+}
+
+/* Toggle switches */
+.toggle-row {
+    padding: 8px 18px;
+}
+
+.toggle-label {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.82rem !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 0 !important;
+}
+
+.toggle-label input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    transition: background 200ms ease;
+    flex-shrink: 0;
+}
+
+.toggle-switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #94a3b8;
+    border-radius: 50%;
+    transition: transform 200ms var(--ease-out), background 200ms ease;
+}
+
+.toggle-label input:checked + .toggle-switch {
+    background: rgba(56, 189, 248, 0.25);
+}
+
+.toggle-label input:checked + .toggle-switch::after {
+    transform: translateX(16px);
+    background: var(--accent-blue);
+}
+
+/* ── HUD Shortcuts Legend ────────────────────────────────────── */
 .hud-shortcuts {
     position: absolute;
     bottom: 16px;
@@ -172,7 +349,7 @@ body {
     opacity: 0.3;
 }
 
-/* Emil Sonner-style Toast Notification */
+/* ── Toast Notification ──────────────────────────────────────── */
 .toast {
     position: absolute;
     top: 20px;
@@ -189,7 +366,8 @@ body {
     padding: 10px 20px;
     border-radius: 12px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+    transition: opacity 200ms var(--ease-out),
+                transform 200ms var(--ease-out);
     will-change: transform, opacity;
 }
 

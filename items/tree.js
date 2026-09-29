@@ -1,5 +1,5 @@
 class Tree {
-    constructor(center, size = 42, height = 65) {
+    constructor(center, size = 40, height = 60) {
         this.center = center;
         this.size = size;
         this.height = height;
@@ -8,7 +8,13 @@ class Tree {
     draw(ctx, viewPoint) {
         const top = getFake3dPoint(this.center, viewPoint, this.height);
 
-        // Multi-tier tapering 3D canopy
+        // Soft ground shadow
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+        ctx.arc(this.center.x + 3, this.center.y + 3, this.size * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Multi-tier tapering 3D canopy (deep forest → bright lime)
         const levelCount = 7;
         for (let level = 0; level < levelCount; level++) {
             const t = level / (levelCount - 1);

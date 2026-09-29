@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virtual World Studio</title>
+    <meta name="description" content="Build your own virtual world with roads, buildings, traffic and trees. Interactive 3D canvas editor.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
     <header class="app-header">
@@ -25,12 +26,57 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                 <span>Save World</span>
             </button>
+            <button class="btn btn-accent" onclick="toggleSettings()" title="World Settings">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <span>Settings</span>
+            </button>
         </nav>
     </header>
 
     <main class="canvas-container">
         <canvas id="myCanvas" width="1300" height="600"></canvas>
-        
+
+        <!-- Settings Panel -->
+        <aside class="settings-panel" id="settingsPanel">
+            <div class="panel-header">
+                <h2>⚙ World Settings</h2>
+                <button class="btn-close" onclick="toggleSettings()">✕</button>
+            </div>
+            <div class="setting-group">
+                <label for="carSlider">🚗 Traffic Cars</label>
+                <div class="slider-row">
+                    <input type="range" id="carSlider" min="0" max="20" value="10"
+                           oninput="updateCarCount(this.value)">
+                    <span class="slider-value" id="carCountLabel">10</span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label for="roadSlider">🛣️ Road Width</label>
+                <div class="slider-row">
+                    <input type="range" id="roadSlider" min="60" max="200" value="100"
+                           oninput="updateRoadWidth(this.value)">
+                    <span class="slider-value" id="roadWidthLabel">100px</span>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="setting-group toggle-row">
+                <label class="toggle-label">
+                    <input type="checkbox" id="buildingToggle" checked
+                           onchange="toggleBuildings(this.checked)">
+                    <span class="toggle-switch"></span>
+                    🏠 Buildings
+                </label>
+            </div>
+            <div class="setting-group toggle-row">
+                <label class="toggle-label">
+                    <input type="checkbox" id="treeToggle" checked
+                           onchange="toggleTrees(this.checked)">
+                    <span class="toggle-switch"></span>
+                    🌳 Trees
+                </label>
+            </div>
+        </aside>
+
         <footer class="hud-shortcuts">
             <span class="hud-item"><kbd>Left Click</kbd> Add / Connect</span>
             <span class="hud-sep">·</span>
@@ -45,22 +91,23 @@
     </main>
 
     <!-- Math utilities must load first (used by all other modules) -->
-    <script src="math/utils.js?v=5"></script>
+    <script src="math/utils.js?v=6"></script>
     <!-- Primitives -->
-    <script src="primitives/point.js?v=5"></script>
-    <script src="primitives/segment.js?v=5"></script>
-    <script src="primitives/polygon.js?v=5"></script>
-    <script src="primitives/envelope.js?v=5"></script>
-    <!-- Items -->
-    <script src="items/tree.js?v=5"></script>
-    <script src="items/building.js?v=5"></script>
+    <script src="primitives/point.js?v=6"></script>
+    <script src="primitives/segment.js?v=6"></script>
+    <script src="primitives/polygon.js?v=6"></script>
+    <script src="primitives/envelope.js?v=6"></script>
+    <!-- Items (depend on utils + primitives) -->
+    <script src="items/tree.js?v=6"></script>
+    <script src="items/building.js?v=6"></script>
+    <script src="items/car.js?v=6"></script>
     <!-- Graph & World -->
-    <script src="math/graph.js?v=5"></script>
-    <script src="world.js?v=5"></script>
+    <script src="math/graph.js?v=6"></script>
+    <script src="world.js?v=6"></script>
     <!-- Editor -->
-    <script src="viewport.js?v=5"></script>
-    <script src="graphEditor.js?v=5"></script>
+    <script src="viewport.js?v=6"></script>
+    <script src="graphEditor.js?v=6"></script>
     <!-- Entry point -->
-    <script src="main.js?v=5"></script>
+    <script src="main.js?v=6"></script>
 </body>
 </html>
