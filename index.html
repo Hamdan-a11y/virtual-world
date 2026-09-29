@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
     <header class="app-header">
@@ -22,48 +22,66 @@
         <!-- Primary Tool Palette -->
         <nav class="tool-palette" aria-label="Placement Tools">
             <button class="tool-btn active" data-mode="road" onclick="setEditorMode('road')" title="Draw & Connect Roads [1]">
-                <span class="tool-icon">🛣️</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19L8 5"/><path d="M20 19L16 5"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="11" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
+                </span>
                 <span class="tool-label">Road</span>
                 <kbd class="tool-kbd">1</kbd>
             </button>
             <button class="tool-btn" data-mode="building" onclick="setEditorMode('building')" title="Place Commercial Building [2]">
-                <span class="tool-icon">🏢</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="7" x2="10" y2="7"/><line x1="14" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="10" y2="11"/><line x1="14" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="10" y2="15"/><line x1="14" y1="15" x2="16" y2="15"/><path d="M10 21v-3h4v3"/></svg>
+                </span>
                 <span class="tool-label">Building</span>
                 <kbd class="tool-kbd">2</kbd>
             </button>
             <button class="tool-btn" data-mode="house" onclick="setEditorMode('house')" title="Place Residential House [3]">
-                <span class="tool-icon">🏡</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M18 5.5v-2h-2v3.7"/><path d="M10 21v-6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v6"/></svg>
+                </span>
                 <span class="tool-label">House</span>
                 <kbd class="tool-kbd">3</kbd>
             </button>
             <button class="tool-btn" data-mode="tree" onclick="setEditorMode('tree')" title="Plant Realistic Trees [4]">
-                <span class="tool-icon">🌳</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7"/><path d="M12 15a5.5 5.5 0 0 1-5-3.3 4.5 4.5 0 0 1 1.5-5.2 4.5 4.5 0 0 1 7 0 4.5 4.5 0 0 1 1.5 5.2A5.5 5.5 0 0 1 12 15z"/></svg>
+                </span>
                 <span class="tool-label">Tree</span>
                 <kbd class="tool-kbd">4</kbd>
             </button>
             <button class="tool-btn" data-mode="car" onclick="setEditorMode('car')" title="Spawn Driving Cars [5]">
-                <span class="tool-icon">🚗</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                </span>
                 <span class="tool-label">Car</span>
                 <kbd class="tool-kbd">5</kbd>
             </button>
             <button class="tool-btn" data-mode="person" onclick="setEditorMode('person')" title="Place Walking Pedestrians [6]">
-                <span class="tool-icon">🚶</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M10 22l2-7 3 3v4"/><path d="M14 13l2-3-4-2-3 3 2 4"/></svg>
+                </span>
                 <span class="tool-label">Person</span>
                 <kbd class="tool-kbd">6</kbd>
             </button>
             <button class="tool-btn" data-mode="light" onclick="setEditorMode('light')" title="Place Street Lamps [7]">
-                <span class="tool-icon">💡</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6"/><path d="M12 21V7"/><path d="M12 7c0-2.5 2-4.5 4.5-4.5h.5"/><path d="M17 2.5v3"/><path d="M14.5 5.5h5l-1 4h-3z"/><circle cx="17" cy="11.5" r="1.5" fill="currentColor"/></svg>
+                </span>
                 <span class="tool-label">Lamp</span>
                 <kbd class="tool-kbd">7</kbd>
             </button>
             <div class="tool-sep"></div>
             <button class="tool-btn action-btn" onclick="rotateActiveItem()" title="Rotate item 45° [R]">
-                <span class="tool-icon">🔄</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.8 1 6.5 2.7L21 8"/><polyline points="21 3 21 8 16 8"/></svg>
+                </span>
                 <span class="tool-label">Rotate</span>
                 <kbd class="tool-kbd">R</kbd>
             </button>
             <button class="tool-btn danger-tool" data-mode="eraser" onclick="setEditorMode('eraser')" title="Erase item or road point [X]">
-                <span class="tool-icon">🧹</span>
+                <span class="tool-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13.5L11.5 20 4 12.5 13.5 3 20 9.5z"/><path d="M15 16.5l-6-6"/><line x1="18" y1="21" x2="22" y2="21"/></svg>
+                </span>
                 <span class="tool-label">Eraser</span>
                 <kbd class="tool-kbd">X</kbd>
             </button>
@@ -86,13 +104,25 @@
         </div>
     </header>
 
-    <!-- Sub-options Bar (e.g. Tree species picker) -->
+    <!-- Sub-options Bar (Tree species picker) -->
     <div class="sub-toolbar" id="treePicker" style="display: none;">
         <span class="sub-label">Tree Variety:</span>
-        <button class="tree-chip active" data-tree="oak" onclick="setTreeSpecies('oak')">🟢 Oak</button>
-        <button class="tree-chip" data-tree="pine" onclick="setTreeSpecies('pine')">🌲 Pine</button>
-        <button class="tree-chip" data-tree="cherry" onclick="setTreeSpecies('cherry')">🌸 Cherry</button>
-        <button class="tree-chip" data-tree="autumn" onclick="setTreeSpecies('autumn')">🍁 Autumn</button>
+        <button class="tree-chip active" data-tree="oak" onclick="setTreeSpecies('oak')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-5"/><circle cx="12" cy="10" r="6"/></svg>
+            <span>Oak</span>
+        </button>
+        <button class="tree-chip" data-tree="pine" onclick="setTreeSpecies('pine')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-4"/><polygon points="12 3 5 17 19 17"/></svg>
+            <span>Pine</span>
+        </button>
+        <button class="tree-chip" data-tree="cherry" onclick="setTreeSpecies('cherry')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 5a3 3 0 0 1 3 3"/><path d="M19 12a3 3 0 0 1-3 3"/><path d="M12 19a3 3 0 0 1-3-3"/><path d="M5 12a3 3 0 0 1 3-3"/></svg>
+            <span>Cherry</span>
+        </button>
+        <button class="tree-chip" data-tree="autumn" onclick="setTreeSpecies('autumn')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-6"/><path d="M12 16L7 11l2-1-3-3 4 1 2-4 2 4 4-1-3 3 2 1z"/></svg>
+            <span>Autumn</span>
+        </button>
     </div>
 
     <main class="canvas-container">
@@ -101,12 +131,18 @@
         <!-- Settings Panel -->
         <aside class="settings-panel" id="settingsPanel">
             <div class="panel-header">
-                <h2>⚙ World Settings</h2>
+                <h2>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    World Settings
+                </h2>
                 <button class="btn-close" onclick="toggleSettings()">✕</button>
             </div>
             
             <div class="setting-group">
-                <label for="carSlider">🚗 Ambient Traffic</label>
+                <label for="carSlider">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 5px;"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                    Ambient Traffic
+                </label>
                 <div class="slider-row">
                     <input type="range" id="carSlider" min="0" max="25" value="8"
                            oninput="updateCarCount(this.value)">
@@ -115,7 +151,10 @@
             </div>
             
             <div class="setting-group">
-                <label for="roadSlider">🛣️ Road Width</label>
+                <label for="roadSlider">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 5px;"><path d="M4 19L8 5"/><path d="M20 19L16 5"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
+                    Road Width
+                </label>
                 <div class="slider-row">
                     <input type="range" id="roadSlider" min="60" max="180" value="100"
                            oninput="updateRoadWidth(this.value)">
@@ -130,7 +169,10 @@
                     <input type="checkbox" id="autoSceneryToggle" checked
                            onchange="toggleAutoScenery(this.checked)">
                     <span class="toggle-switch"></span>
-                    ✨ Auto Road Scenery
+                    <span class="setting-label-content">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>
+                        Auto Road Scenery
+                    </span>
                 </label>
             </div>
 
@@ -139,7 +181,10 @@
                     <input type="checkbox" id="buildingToggle" checked
                            onchange="toggleBuildings(this.checked)">
                     <span class="toggle-switch"></span>
-                    🏢 Commercial Towers
+                    <span class="setting-label-content">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="7" x2="10" y2="7"/><line x1="14" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="10" y2="11"/><line x1="14" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="10" y2="15"/><line x1="14" y1="15" x2="16" y2="15"/></svg>
+                        Commercial Towers
+                    </span>
                 </label>
             </div>
 
@@ -148,7 +193,10 @@
                     <input type="checkbox" id="houseToggle" checked
                            onchange="toggleHouses(this.checked)">
                     <span class="toggle-switch"></span>
-                    🏡 Residential Houses
+                    <span class="setting-label-content">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M10 21v-6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v6"/></svg>
+                        Residential Houses
+                    </span>
                 </label>
             </div>
 
@@ -157,7 +205,10 @@
                     <input type="checkbox" id="treeToggle" checked
                            onchange="toggleTrees(this.checked)">
                     <span class="toggle-switch"></span>
-                    🌳 Trees & Flora
+                    <span class="setting-label-content">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7"/><path d="M12 15a5.5 5.5 0 0 1-5-3.3 4.5 4.5 0 0 1 1.5-5.2 4.5 4.5 0 0 1 7 0 4.5 4.5 0 0 1 1.5 5.2A5.5 5.5 0 0 1 12 15z"/></svg>
+                        Trees & Flora
+                    </span>
                 </label>
             </div>
 
@@ -166,7 +217,10 @@
                     <input type="checkbox" id="personToggle" checked
                            onchange="togglePeople(this.checked)">
                     <span class="toggle-switch"></span>
-                    🚶 Pedestrians
+                    <span class="setting-label-content">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M10 22l2-7 3 3v4"/><path d="M14 13l2-3-4-2-3 3 2 4"/></svg>
+                        Pedestrians
+                    </span>
                 </label>
             </div>
 
@@ -175,7 +229,10 @@
                     <input type="checkbox" id="lightToggle" checked
                            onchange="toggleLights(this.checked)">
                     <span class="toggle-switch"></span>
-                    💡 Street Lamps
+                    <span class="setting-label-content">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6"/><path d="M12 21V7"/><path d="M12 7c0-2.5 2-4.5 4.5-4.5h.5"/><path d="M17 2.5v3"/><path d="M14.5 5.5h5l-1 4h-3z"/></svg>
+                        Street Lamps
+                    </span>
                 </label>
             </div>
         </aside>
@@ -199,26 +256,26 @@
     </main>
 
     <!-- Math utilities must load first -->
-    <script src="math/utils.js?v=9"></script>
+    <script src="math/utils.js?v=10"></script>
     <!-- Primitives -->
-    <script src="primitives/point.js?v=9"></script>
-    <script src="primitives/segment.js?v=9"></script>
-    <script src="primitives/polygon.js?v=9"></script>
-    <script src="primitives/envelope.js?v=9"></script>
+    <script src="primitives/point.js?v=10"></script>
+    <script src="primitives/segment.js?v=10"></script>
+    <script src="primitives/polygon.js?v=10"></script>
+    <script src="primitives/envelope.js?v=10"></script>
     <!-- Items -->
-    <script src="items/tree.js?v=9"></script>
-    <script src="items/building.js?v=9"></script>
-    <script src="items/house.js?v=9"></script>
-    <script src="items/person.js?v=9"></script>
-    <script src="items/light.js?v=9"></script>
-    <script src="items/car.js?v=9"></script>
+    <script src="items/tree.js?v=10"></script>
+    <script src="items/building.js?v=10"></script>
+    <script src="items/house.js?v=10"></script>
+    <script src="items/person.js?v=10"></script>
+    <script src="items/light.js?v=10"></script>
+    <script src="items/car.js?v=10"></script>
     <!-- Graph & World Engine -->
-    <script src="math/graph.js?v=9"></script>
-    <script src="world.js?v=9"></script>
+    <script src="math/graph.js?v=10"></script>
+    <script src="world.js?v=10"></script>
     <!-- Viewport & Unified World Editor -->
-    <script src="viewport.js?v=9"></script>
-    <script src="worldEditor.js?v=9"></script>
+    <script src="viewport.js?v=10"></script>
+    <script src="worldEditor.js?v=10"></script>
     <!-- Main Application Entry Point -->
-    <script src="main.js?v=9"></script>
+    <script src="main.js?v=10"></script>
 </body>
 </html>

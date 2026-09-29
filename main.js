@@ -163,19 +163,19 @@ function setEditorMode(mode) {
         treePicker.style.display = (mode === "tree") ? "flex" : "none";
     }
 
-    showToast(`🛠️ Tool: ${mode.toUpperCase()} (Press 'R' to rotate)`);
+    showToast(`Tool: ${mode.toUpperCase()} (Press 'R' to rotate)`);
 }
 
 function setTreeSpecies(species) {
     worldEditor.treeType = species;
     const btns = document.querySelectorAll(".tree-chip");
     btns.forEach(b => b.classList.toggle("active", b.dataset.tree === species));
-    showToast(`🌳 Selected: ${species.toUpperCase()} tree`);
+    showToast(`Selected: ${species.toUpperCase()} tree`);
 }
 
 function rotateActiveItem() {
     worldEditor.rotatePlacement();
-    showToast("🔄 Rotated 45°");
+    showToast("Rotated 45°");
 }
 
 // ── Save & Clear ────────────────────────────────────────────────────
@@ -214,7 +214,7 @@ function save() {
 
     localStorage.setItem("virtual_world_data", JSON.stringify(saveData));
     localStorage.setItem("graph", JSON.stringify(graph));
-    showToast("💾 World saved successfully!");
+    showToast("World saved successfully");
 }
 
 function dispose() {
@@ -222,7 +222,7 @@ function dispose() {
     world.generate();
     localStorage.removeItem("virtual_world_data");
     localStorage.removeItem("graph");
-    showToast("🗑️ World cleared");
+    showToast("World cleared");
 }
 
 // ── Settings Panel ──────────────────────────────────────────────────
@@ -265,7 +265,7 @@ function toggleLights(checked) {
 function toggleAutoScenery(checked) {
     world.autoGenerateScenery = checked;
     world.generate();
-    showToast(checked ? "✨ Auto-scenery enabled" : "🔒 Manual mode only");
+    showToast(checked ? "Auto-scenery enabled" : "Manual mode only");
 }
 
 // ── Toast Notifications ─────────────────────────────────────────────

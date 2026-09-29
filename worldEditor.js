@@ -45,7 +45,7 @@ class WorldEditor {
             const key = evt.key.toLowerCase();
             if (key === "r") {
                 this.rotatePlacement();
-                showToast("🔄 Rotated 45°");
+                showToast("Rotated 45°");
             } else if (key === "1") {
                 setEditorMode("road");
             } else if (key === "2") {
@@ -140,7 +140,7 @@ class WorldEditor {
             const item = this.world.getItemAt(this.mouse);
             if (item) {
                 this.world.removeItem(item);
-                showToast(`🗑️ Removed ${item.type}`);
+                showToast(`Removed ${item.type}`);
             }
         }
     }
@@ -173,12 +173,12 @@ class WorldEditor {
         const tempBldg = new Building(this.mouse, width, length, this.rotation, 190);
 
         if (this.world.isCollidingWithRoad(tempBldg.base, 20)) {
-            showToast("⚠️ Cannot place building on road!");
+            showToast("Cannot place building on road");
             return;
         }
 
         this.world.manualBuildings.push(tempBldg);
-        showToast("🏢 Commercial Building placed");
+        showToast("Commercial Building placed");
     }
 
     #handleHousePlacement() {
@@ -187,29 +187,29 @@ class WorldEditor {
         const tempHouse = new House(this.mouse, width, length, this.rotation);
 
         if (this.world.isCollidingWithRoad(tempHouse.base, 15)) {
-            showToast("⚠️ Cannot place house on road!");
+            showToast("Cannot place house on road");
             return;
         }
 
         this.world.manualHouses.push(tempHouse);
-        showToast("🏡 Residential House placed");
+        showToast("Residential House placed");
     }
 
     #handleTreePlacement() {
         if (this.world.isCollidingWithRoad(this.mouse, 15)) {
-            showToast("⚠️ Cannot plant tree on road!");
+            showToast("Cannot plant tree on road");
             return;
         }
 
         const size = 38 + Math.floor(Math.random() * 12);
         const height = 55 + Math.floor(Math.random() * 18);
         this.world.manualTrees.push(new Tree(this.mouse, size, height, this.treeType));
-        showToast(`🌳 Planted ${this.treeType} tree`);
+        showToast(`Planted ${this.treeType} tree`);
     }
 
     #handleCarPlacement() {
         if (this.graph.segments.length === 0) {
-            showToast("⚠️ Draw a road first to place cars!");
+            showToast("Draw a road first to place cars");
             return;
         }
 
@@ -227,21 +227,21 @@ class WorldEditor {
         if (nearestSeg && minDist < this.world.roadWidth) {
             const car = new Car(nearestSeg, this.world.manualCars.length + this.world.cars.length);
             this.world.manualCars.push(car);
-            showToast(`🚗 Added ${car.model.name}`);
+            showToast(`Added ${car.model.name}`);
         } else {
-            showToast("⚠️ Click closer to a road to place a car!");
+            showToast("Click closer to a road to place a car");
         }
     }
 
     #handlePersonPlacement() {
         const person = new Person(this.mouse);
         this.world.manualPeople.push(person);
-        showToast(`🚶 Pedestrian joined the town (${person.outfit.name})`);
+        showToast(`Pedestrian joined the town (${person.outfit.name})`);
     }
 
     #handleLightPlacement() {
         this.world.manualLights.push(new StreetLight(this.mouse));
-        showToast("💡 Street Lamp placed");
+        showToast("Street Lamp placed");
     }
 
     #handleEraserClick() {
@@ -249,7 +249,7 @@ class WorldEditor {
             const type = this.hoveredItem.type;
             this.world.removeItem(this.hoveredItem);
             this.hoveredItem = null;
-            showToast(`🗑️ Deleted ${type}`);
+            showToast(`Deleted ${type}`);
             return;
         }
 
@@ -257,7 +257,7 @@ class WorldEditor {
             this.graph.removePoint(this.hoveredPoint);
             this.hoveredPoint = null;
             this.world.generate();
-            showToast("🗑️ Deleted road point");
+            showToast("Deleted road point");
         }
     }
 
@@ -294,7 +294,7 @@ class WorldEditor {
                 stroke: collides ? "#ef4444" : "#38bdf8",
                 lineWidth: 2
             });
-            this.#drawPlacementHint(collides ? "⚠️ Overlapping Road" : "Click to place building (R to rotate)");
+            this.#drawPlacementHint(collides ? "Road Collision (Invalid)" : "Click to place building (R to rotate)");
         } else if (mode === "house") {
             const house = new House(mouse, 72, 62, rotation);
             const collides = this.world.isCollidingWithRoad(house.base, 15);
@@ -303,7 +303,7 @@ class WorldEditor {
                 stroke: collides ? "#ef4444" : "#10b981",
                 lineWidth: 2
             });
-            this.#drawPlacementHint(collides ? "⚠️ Overlapping Road" : "Click to place house (R to rotate)");
+            this.#drawPlacementHint(collides ? "Road Collision (Invalid)" : "Click to place house (R to rotate)");
         } else if (mode === "tree") {
             const collides = this.world.isCollidingWithRoad(mouse, 15);
             ctx.beginPath();
@@ -313,7 +313,7 @@ class WorldEditor {
             ctx.arc(mouse.x, mouse.y, 22, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
-            this.#drawPlacementHint(collides ? "⚠️ Overlapping Road" : `Click to plant ${this.treeType} tree`);
+            this.#drawPlacementHint(collides ? "Road Collision (Invalid)" : `Click to plant ${this.treeType} tree`);
         } else if (mode === "car") {
             ctx.save();
             ctx.fillStyle = "rgba(59, 130, 246, 0.4)";
