@@ -128,3 +128,42 @@ function distanceToPolygon(point, poly) {
     return minDist;
 }
 
+function adjustColorBrightness(hex, factor) {
+    if (!hex || hex[0] !== "#") return hex;
+    const num = parseInt(hex.slice(1), 16);
+    let r = (num >> 16) & 255;
+    let g = (num >> 8) & 255;
+    let b = num & 255;
+
+    r = Math.min(255, Math.max(0, Math.round(r * factor)));
+    g = Math.min(255, Math.max(0, Math.round(g * factor)));
+    b = Math.min(255, Math.max(0, Math.round(b * factor)));
+
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
+
+// Polyfill CanvasRenderingContext2D.roundRect for maximum browser compatibility
+if (typeof CanvasRenderingContext2D !== "undefined" && !CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, radii = 0) {
+        let r = radii;
+        if (typeof r === "number") r = [r, r, r, r];
+        else if (Array.isArray(r) && r.length === 1) r = [r[0], r[0], r[0], r[0]];
+        else if (Array.isArray(r) && r.length === 2) r = [r[0], r[1], r[0], r[1]];
+        const [tl = 0, tr = 0, br = 0, bl = 0] = r;
+
+        this.moveTo(x + tl, y);
+        this.lineTo(x + w - tr, y);
+        this.quadraticCurveTo(x + w, y, x + w, y + tr);
+        this.lineTo(x + w, y + h - br);
+        this.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+        this.lineTo(x + bl, y + h);
+        this.quadraticCurveTo(x, y + h, x, y + h - bl);
+        this.lineTo(x, y + tl);
+        this.quadraticCurveTo(x, y, x + tl, y);
+        this.closePath();
+        return this;
+    };
+}
+
+
+

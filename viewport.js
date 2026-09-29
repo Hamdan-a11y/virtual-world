@@ -31,33 +31,45 @@ class Viewport {
         return add(this.offset, this.drag.offset);
     }
 
-    getMouse(evt, subtractDragOffset = false) {
-        const p = new Point(
-            (evt.offsetX - this.center.x) * this.zoom - this.offset.x,
-            (evt.offsetY - this.center.y) * this.zoom - this.offset.y
+    getCanvasCoords(evt) {
+        const rect = this.canvas.getBoundingClientRect();
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        return new Point(
+            (evt.clientX - rect.left) * scaleX,
+            (evt.clientY - rect.top) * scaleY
         );
-        return subtractDragOffset ? subtract(p, this.drag.offset) : p;
+    }
+
+    getMouse(evt) {
+        const c = this.getCanvasCoords(evt);
+        const offset = this.getOffset();
+        return new Point(
+            (c.x - this.center.x) * this.zoom - offset.x,
+            (c.y - this.center.y) * this.zoom - offset.y
+        );
     }
 
     #addEventListeners() {
         this.canvas.addEventListener("wheel", (evt) => {
+            evt.preventDefault();
             const dir = Math.sign(evt.deltaY);
             const step = 0.1;
             this.zoom += dir * step;
-            this.zoom = Math.max(1, Math.min(5, this.zoom));
-        });
+            this.zoom = Math.max(0.5, Math.min(3, this.zoom));
+        }, { passive: false });
 
         this.canvas.addEventListener("mousedown", (evt) => {
-            if (evt.button == 1) { // middle click to pan
-                this.drag.start = new Point(evt.offsetX, evt.offsetY);
+            if (evt.button === 1 || (evt.button === 0 && evt.spaceKey)) { // middle click to pan
+                this.drag.start = this.getCanvasCoords(evt);
                 this.drag.active = true;
             }
         });
 
         this.canvas.addEventListener("mousemove", (evt) => {
             if (this.drag.active) {
-                this.drag.end = new Point(evt.offsetX, evt.offsetY);
-                this.drag.offset = subtract(this.drag.end, this.drag.start);
+                this.drag.end = this.getCanvasCoords(evt);
+                this.drag.offset = scale(subtract(this.drag.end, this.drag.start), this.zoom);
             }
         });
 

@@ -249,17 +249,3 @@ class House {
     }
 }
 
-// Utility to adjust hex color brightness
-function adjustColorBrightness(hex, factor) {
-    if (!hex || hex[0] !== "#") return hex;
-    const num = parseInt(hex.slice(1), 16);
-    let r = (num >> 16) & 255;
-    let g = (num >> 8) & 255;
-    let b = num & 255;
-
-    r = Math.min(255, Math.max(0, Math.round(r * factor)));
-    g = Math.min(255, Math.max(0, Math.round(g * factor)));
-    b = Math.min(255, Math.max(0, Math.round(b * factor)));
-
-    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-}

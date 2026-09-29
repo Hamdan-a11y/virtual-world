@@ -2,49 +2,73 @@ const myCanvas = document.getElementById("myCanvas");
 const ctx = myCanvas.getContext("2d");
 
 // Load saved world or create default realistic town
-const savedWorldString = localStorage.getItem("virtual_world_data");
-const savedGraphString = localStorage.getItem("graph");
-
 let worldData = null;
-if (savedWorldString) {
-    try { worldData = JSON.parse(savedWorldString); } catch (e) { console.error(e); }
+try {
+    const savedWorldString = localStorage.getItem("virtual_world_data");
+    if (savedWorldString) worldData = JSON.parse(savedWorldString);
+} catch (e) {
+    console.error("Failed to parse saved world data:", e);
 }
 
-const graph = worldData && worldData.graph
-    ? Graph.load(worldData.graph)
-    : (savedGraphString ? Graph.load(JSON.parse(savedGraphString)) : createDefaultGraph());
+let graph = null;
+if (worldData && worldData.graph && Array.isArray(worldData.graph.points) && worldData.graph.points.length > 0) {
+    graph = Graph.load(worldData.graph);
+} else {
+    try {
+        const savedGraphString = localStorage.getItem("graph");
+        if (savedGraphString) {
+            const parsed = JSON.parse(savedGraphString);
+            if (parsed && Array.isArray(parsed.points) && parsed.points.length > 0) {
+                graph = Graph.load(parsed);
+            }
+        }
+    } catch (e) {
+        console.error("Failed to parse saved graph:", e);
+    }
+}
+
+if (!graph || graph.points.length < 2 || graph.segments.length === 0) {
+    graph = createDefaultGraph();
+}
 
 const world = new World(graph);
 
 // Restore manual items if present
+let hasManualItems = false;
 if (worldData) {
-    if (worldData.manualBuildings) {
+    if (Array.isArray(worldData.manualBuildings) && worldData.manualBuildings.length > 0) {
         world.manualBuildings = worldData.manualBuildings.map(b =>
             new Building(new Point(b.center.x, b.center.y), b.width, b.length, b.rotation, b.height)
         );
+        hasManualItems = true;
     }
-    if (worldData.manualHouses) {
+    if (Array.isArray(worldData.manualHouses) && worldData.manualHouses.length > 0) {
         world.manualHouses = worldData.manualHouses.map(h =>
             new House(new Point(h.center.x, h.center.y), h.width, h.length, h.rotation, h.styleIndex)
         );
+        hasManualItems = true;
     }
-    if (worldData.manualTrees) {
+    if (Array.isArray(worldData.manualTrees) && worldData.manualTrees.length > 0) {
         world.manualTrees = worldData.manualTrees.map(t =>
             new Tree(new Point(t.center.x, t.center.y), t.size, t.height, t.treeType)
         );
+        hasManualItems = true;
     }
-    if (worldData.manualPeople) {
+    if (Array.isArray(worldData.manualPeople) && worldData.manualPeople.length > 0) {
         world.manualPeople = worldData.manualPeople.map(p =>
             new Person(new Point(p.pos.x, p.pos.y), p.outfitIndex)
         );
+        hasManualItems = true;
     }
-    if (worldData.manualLights) {
+    if (Array.isArray(worldData.manualLights) && worldData.manualLights.length > 0) {
         world.manualLights = worldData.manualLights.map(l =>
             new StreetLight(new Point(l.center.x, l.center.y), l.height)
         );
+        hasManualItems = true;
     }
-} else if (!savedGraphString) {
-    // Brand new session: populate with a realistic miniature town!
+}
+
+if (!hasManualItems) {
     populateDefaultTown(world);
 }
 
@@ -54,14 +78,18 @@ const worldEditor = new WorldEditor(viewport, world);
 // Initial generation
 world.generate();
 
-// Main render loop
+// Main render loop with bulletproof error recovery
 animate();
 
 function animate() {
-    viewport.reset();
-    world.update();
-    world.draw(ctx, scale(viewport.getOffset(), -1));
-    worldEditor.display();
+    try {
+        viewport.reset();
+        world.update();
+        world.draw(ctx, scale(viewport.getOffset(), -1));
+        worldEditor.display();
+    } catch (err) {
+        console.error("Render loop error:", err);
+    }
     requestAnimationFrame(animate);
 }
 

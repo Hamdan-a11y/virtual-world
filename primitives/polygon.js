@@ -87,6 +87,11 @@ class Polygon {
         return polygonsIntersect(this, otherPoly);
     }
 
+    distanceToPoint(point) {
+        if (this.points.length === 0) return Infinity;
+        return Math.min(...this.points.map((p) => distance(p, point)));
+    }
+
     draw(ctx, { stroke = "#444", lineWidth = 2, fill = "#555" } = {}) {
         ctx.beginPath();
         ctx.fillStyle = fill;

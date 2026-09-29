@@ -64,12 +64,20 @@ dispose() {
     this.points.length = 0;
     this.segments.length = 0;
 }
-static load(info) {
-    const points = info.points.map((p) => new Point(p.x, p.y));
-    const segments = info.segments.map((s) => new Segment(
-        points.find((p) => p.equals(s.p1)),
-        points.find((p) => p.equals(s.p2))
-    ));
-    return new Graph(points, segments);
-}
+    static load(info) {
+        if (!info || !Array.isArray(info.points)) return new Graph();
+        const points = info.points.map((p) => new Point(p.x, p.y));
+        const segments = [];
+        if (Array.isArray(info.segments)) {
+            for (const s of info.segments) {
+                if (!s || !s.p1 || !s.p2) continue;
+                const p1 = points.find((p) => p.equals(s.p1));
+                const p2 = points.find((p) => p.equals(s.p2));
+                if (p1 && p2 && !p1.equals(p2)) {
+                    segments.push(new Segment(p1, p2));
+                }
+            }
+        }
+        return new Graph(points, segments);
+    }
 }
